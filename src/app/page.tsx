@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import GoldTicker from "@/components/GoldTicker";
 import JewelryCard from "@/components/JewelryCard";
 import { getOrnaments } from "@/lib/database";
@@ -111,6 +112,8 @@ export default function CatalogPage() {
           </div>
         )}
       </main>
+
+      <Footer />
     </>
   );
 }

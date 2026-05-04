@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useGoldPrice } from "@/context/GoldPriceContext";
 import { TrendingUp, Gem } from "lucide-react";
 
@@ -11,8 +12,15 @@ export default function Navbar() {
       <div className="container">
         <div className="navbar-inner">
           {/* Brand */}
-          <Link href="/" className="navbar-brand">
-            The <span>Gilded</span> Gallery
+          <Link href="/" className="navbar-brand" style={{ display: 'flex', alignItems: 'center' }}>
+            <Image 
+              src="/logo.png" 
+              alt="Shete Jewellers" 
+              width={200} 
+              height={70} 
+              style={{ objectFit: 'contain' }} 
+              priority
+            />
           </Link>
 
           {/* Center: breadcrumb */}

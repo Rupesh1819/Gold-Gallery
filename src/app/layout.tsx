@@ -3,12 +3,12 @@ import "./globals.css";
 import { GoldPriceProvider } from "@/context/GoldPriceContext";
 
 export const metadata: Metadata = {
-  title: "The Gilded Gallery — Luxury Gold Jewelry",
+  title: "Shete Jewellers — Luxury Gold Jewelry",
   description:
     "Discover exquisite handcrafted gold jewelry. Real-time gold pricing, curated collections, and bespoke artisanship.",
   keywords: ["gold jewelry", "luxury jewelry", "handcrafted gold", "jewelry catalog"],
   openGraph: {
-    title: "The Gilded Gallery",
+    title: "Shete Jewellers",
     description: "Luxury gold jewelry catalog with live pricing",
     type: "website",
   },
