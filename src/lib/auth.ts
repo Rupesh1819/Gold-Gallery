@@ -5,10 +5,6 @@ import { User } from "@supabase/supabase-js";
 export const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL!;
 
 export async function signInWithEmail(email: string, pass: string): Promise<User> {
-  // Mock login for admin
-  if (email === ADMIN_EMAIL) {
-    return { email: ADMIN_EMAIL, id: "mock-id", aud: "authenticated" } as User;
-  }
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password: pass,
