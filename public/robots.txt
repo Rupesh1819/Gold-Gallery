@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shete-jewellers.onrender.com/sitemap.xml

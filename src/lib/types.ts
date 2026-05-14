@@ -1,4 +1,4 @@
-// Ornament document schema in Firestore "ornaments" collection
+// Ornament document schema in Supabase "ornaments" table
 export interface Ornament {
   id: string;
   name: string;
@@ -14,10 +14,9 @@ export interface Ornament {
   updatedAt: Date;
 }
 
-// Gold rate settings document in "settings/gold_rate"
+// Gold rate settings document in Supabase "settings" table (id = "gold_rate")
 export interface GoldRateSettings {
   manual_rate: number;      // Rate in INR per gram (22K)
-  use_manual: boolean;      // Toggle: true = manual, false = live API
   last_updated: Date;
   updated_by: string;
 }

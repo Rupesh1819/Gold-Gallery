@@ -49,7 +49,7 @@ export function GoldPriceProvider({ children }: { children: React.ReactNode }) {
           setSettings(data as GoldRateSettings);
           if (data.last_updated) setLastUpdated(new Date(data.last_updated));
         } else {
-          setSettings({ manual_rate: 6800, use_manual: true, last_updated: new Date(), updated_by: "" });
+          setSettings({ manual_rate: 6800, last_updated: new Date(), updated_by: "" });
         }
       } catch (err) {
         console.error("Failed to fetch settings:", err);
@@ -60,8 +60,8 @@ export function GoldPriceProvider({ children }: { children: React.ReactNode }) {
 
     fetchInitialSettings();
 
-    // Polling fallback every 10 seconds in case Realtime is disabled
-    const pollInterval = setInterval(fetchInitialSettings, 10000);
+    // Polling fallback every 60 seconds in case Realtime is disabled
+    const pollInterval = setInterval(fetchInitialSettings, 60000);
 
     // Subscribe to realtime changes on the settings table
     const channel = supabase

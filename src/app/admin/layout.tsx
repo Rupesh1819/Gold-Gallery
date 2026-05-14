@@ -5,26 +5,23 @@ import { Menu, X, LogOut } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 import { isAdmin, signInWithEmail, signOut } from "@/lib/auth";
+import { useToast } from "@/context/ToastContext";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  
-  // Auth state
   const [user, setUser] = useState<User | null>(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
-  
-  // Login form state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const { showToast } = useToast();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setUser(data.session?.user || null);
       setLoadingAuth(false);
     });
-
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user || null);
     });
@@ -38,8 +35,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     try {
       const loggedUser = await signInWithEmail(email, password);
       setUser(loggedUser);
+      showToast("Welcome back!", "success");
     } catch (err: any) {
       setLoginError(err.message || "Invalid credentials");
+      showToast("Login failed", "error");
     } finally {
       setIsLoggingIn(false);
     }
@@ -48,6 +47,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const handleLogout = async () => {
     await signOut();
     setUser(null);
+    showToast("Logged out successfully", "info");
   };
 
   if (loadingAuth) {
@@ -60,13 +60,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="card" style={{ maxWidth: "420px", width: "100%", padding: "var(--space-8)", margin: "var(--space-4)" }}>
           <h2 className="text-display-md mb-2 text-center" style={{ color: "var(--color-primary)" }}>Vault Access</h2>
           <p className="text-body-md text-center text-muted mb-6">Restricted to authorized personnel only.</p>
-          
           {loginError && (
             <div className="mb-4 text-center" style={{ color: "var(--color-error)", background: "var(--color-error-container)", padding: "var(--space-2)" }}>
               {loginError}
             </div>
           )}
-          
           <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
             <div className="input-group">
               <label className="input-label">Admin Email</label>
@@ -87,34 +85,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="admin-layout">
-      {/* Mobile Hamburger Button */}
-      <button 
-        className="mobile-menu-btn"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label="Toggle Menu"
-      >
+      <button className="mobile-menu-btn" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle Menu">
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
-
-      {/* Sidebar Overlay for Mobile */}
-      {isOpen && (
-        <div className="sidebar-overlay" onClick={() => setIsOpen(false)} />
-      )}
-
+      {isOpen && <div className="sidebar-overlay" onClick={() => setIsOpen(false)} />}
       <aside className={`admin-sidebar ${isOpen ? "open" : ""}`}>
         <h2 className="text-label-lg mb-8" style={{ color: "var(--color-gold)" }}>Vault Admin</h2>
         <nav style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
           <a href="#dashboard" onClick={() => setIsOpen(false)} className="text-body-md" style={{ color: "var(--color-on-surface)" }}>Dashboard</a>
-          <a href="#pricing" onClick={() => setIsOpen(false)} className="text-body-md text-muted hover:text-gold">Pricing Control</a>
-          <a href="#inventory" onClick={() => setIsOpen(false)} className="text-body-md text-muted hover:text-gold">Inventory</a>
-          
+          <a href="#pricing" onClick={() => setIsOpen(false)} className="text-body-md text-muted">Pricing Control</a>
+          <a href="#inventory" onClick={() => setIsOpen(false)} className="text-body-md text-muted">Inventory</a>
           <div className="divider" style={{ margin: "var(--space-4) 0" }}></div>
-          <button onClick={handleLogout} className="text-body-md text-muted hover:text-gold" style={{ display: "flex", alignItems: "center", gap: "8px", textAlign: "left" }}>
+          <button onClick={handleLogout} className="text-body-md text-muted" style={{ display: "flex", alignItems: "center", gap: "8px", textAlign: "left" }}>
             <LogOut size={16} /> Secure Logout
           </button>
         </nav>
       </aside>
-      
       <main className="admin-content">
         <Navbar />
         {children}
