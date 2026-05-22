@@ -24,9 +24,10 @@ export default function LoginPage() {
         showToast("Access denied. Admin only.", "error");
         await signOut();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      showToast("Login failed: " + (error.message || "Check your credentials."), "error");
+      const message = error instanceof Error ? error.message : "Check your credentials.";
+      showToast("Login failed: " + message, "error");
     } finally {
       setLoading(false);
     }

@@ -36,8 +36,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       const loggedUser = await signInWithEmail(email, password);
       setUser(loggedUser);
       showToast("Welcome back!", "success");
-    } catch (err: any) {
-      setLoginError(err.message || "Invalid credentials");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Invalid credentials";
+      setLoginError(message);
       showToast("Login failed", "error");
     } finally {
       setIsLoggingIn(false);

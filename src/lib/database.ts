@@ -45,7 +45,7 @@ export async function updateOrnament(
 ): Promise<void> {
   const { error } = await supabase
     .from("ornaments")
-    .update({ ...data, updatedAt: new Date() })
+    .update({ ...data, updatedAt: new Date().toISOString() })
     .eq("id", id);
 
   if (error) {
@@ -75,7 +75,7 @@ export async function updateGoldRateSettings(
 ): Promise<void> {
   const { error } = await supabase
     .from("settings")
-    .update({ ...settings, last_updated: new Date() })
+    .update({ ...settings, last_updated: new Date().toISOString() })
     .eq("id", "gold_rate");
 
   if (error) {

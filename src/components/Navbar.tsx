@@ -21,6 +21,7 @@ export default function Navbar() {
                 alt="Shete Jewellers"
                 width={200}
                 height={70}
+                className="navbar-logo"
                 style={{ objectFit: "contain" }}
                 priority
               />

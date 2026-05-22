@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { useGoldPrice } from "@/context/GoldPriceContext";
 
 export default function GoldTicker() {

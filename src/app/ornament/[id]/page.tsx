@@ -239,7 +239,16 @@ export default function OrnamentDetailPage() {
       {/* Image Zoom */}
       {zoomedImage && (
         <div className="image-zoom-overlay" onClick={() => setZoomedImage(false)}>
-          <img src={ornament.imageUrl} alt={ornament.name} />
+          <div style={{ position: "relative", width: "90vw", height: "90vh" }}>
+            <Image
+              src={ornament.imageUrl}
+              alt={ornament.name}
+              fill
+              sizes="90vw"
+              style={{ objectFit: "contain" }}
+              priority
+            />
+          </div>
         </div>
       )}
 

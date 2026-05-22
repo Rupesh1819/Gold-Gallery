@@ -133,45 +133,44 @@ export default function CatalogPage() {
         </div>
 
         {/* Search, Purity & Sort */}
-        <div style={{ display: "flex", gap: "16px", justifyContent: "center", marginBottom: "16px", flexWrap: "wrap", alignItems: "center" }}>
-          <div style={{ position: "relative", maxWidth: "300px", flex: "1 1 200px" }}>
-            <Search size={16} style={{ position: "absolute", left: "0", top: "50%", transform: "translateY(-50%)", color: "var(--color-outline)" }} />
+        <div className="catalog-controls">
+          <div className="search-wrapper">
+            <Search size={16} />
             <input
               type="text"
               placeholder="Search ornaments..."
-              className="input-field"
-              style={{ paddingLeft: "24px" }}
+              className="search-input"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <select
-            className="input-select"
-            style={{ maxWidth: "150px" }}
-            value={purityFilter}
-            onChange={(e) => setPurityFilter(e.target.value)}
-          >
-            <option value="All">All Purity</option>
-            <option value="18">18K</option>
-            <option value="20">20K</option>
-            <option value="22">22K</option>
-            <option value="24">24K</option>
-          </select>
-          <select
-            className="input-select"
-            style={{ maxWidth: "180px" }}
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as SortOption)}
-          >
-            <option value="newest">Newest First</option>
-            <option value="price-low">Price: Low → High</option>
-            <option value="price-high">Price: High → Low</option>
-            <option value="weight">Heaviest First</option>
-          </select>
+          <div className="select-group">
+            <select
+              className="input-select"
+              value={purityFilter}
+              onChange={(e) => setPurityFilter(e.target.value)}
+            >
+              <option value="All">All Purity</option>
+              <option value="18">18K</option>
+              <option value="20">20K</option>
+              <option value="22">22K</option>
+              <option value="24">24K</option>
+            </select>
+            <select
+              className="input-select"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as SortOption)}
+            >
+              <option value="newest">Newest First</option>
+              <option value="price-low">Price: Low → High</option>
+              <option value="price-high">Price: High → Low</option>
+              <option value="weight">Heaviest First</option>
+            </select>
+          </div>
         </div>
 
         {/* Results count */}
-        <div className="sort-bar">
+        <div className="sort-bar" style={{ justifyContent: "center", marginBottom: "var(--space-6)" }}>
           <span className="results-count">
             {loading ? "Loading..." : `${filtered.length} item${filtered.length !== 1 ? "s" : ""} found`}
           </span>

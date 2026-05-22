@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import imageCompression from "browser-image-compression";
 import { supabase } from "@/lib/supabase";
 import {
@@ -60,8 +61,9 @@ export default function AdminDashboard() {
       await updateGoldRateSettings(settings);
       await fetchData();
       showToast("Pricing settings updated!", "success");
-    } catch (err: any) {
-      showToast("Error updating settings: " + (err.message || "Unknown error"), "error");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      showToast("Error updating settings: " + message, "error");
     }
   };
 
@@ -244,6 +246,7 @@ export default function AdminDashboard() {
               <input required={!editingId} type="file" accept="image/*" onChange={e => setImageFile(e.target.files?.[0] || null)} />
               {imagePreview && (
                 <div className="image-preview">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={imagePreview} alt="Preview" />
                 </div>
               )}
@@ -289,7 +292,7 @@ export default function AdminDashboard() {
             <tbody>
               {currentOrnaments.map(o => (
                 <tr key={o.id}>
-                  <td><img src={o.imageUrl} alt={o.name} style={{ width: "40px", height: "40px", objectFit: "cover" }} /></td>
+                  <td><Image src={o.imageUrl} alt={o.name} width={40} height={40} style={{ objectFit: "cover" }} /></td>
                   <td>{o.name}</td>
                   <td>{o.category}</td>
                   <td>{o.weightGrams}g</td>
