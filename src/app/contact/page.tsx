@@ -30,7 +30,7 @@ export default function ContactPage() {
                 <h3 className="text-label-lg mb-2">Store Address</h3>
                 <p className="text-body-md text-muted">
                   Shete Jewellers<br />
-                  Main Road, Market Area<br />
+                  Near Mahadev Mandir,Chousala, Beed<br />
                   Maharashtra, India
                 </p>
               </div>
@@ -70,8 +70,8 @@ export default function ContactPage() {
               <div>
                 <h3 className="text-label-lg mb-2">Business Hours</h3>
                 <p className="text-body-md text-muted">
-                  Monday – Saturday: 10:00 AM – 8:00 PM<br />
-                  Sunday: 10:00 AM – 2:00 PM
+                  Monday – Saturday: 8:00 AM – 8:00 PM<br />
+                  Sunday: CLOSED
                 </p>
               </div>
             </div>
