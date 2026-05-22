@@ -805,29 +805,23 @@ input, select, textarea {
 
 @media (max-width: 768px) {
   .filter-bar {
-    flex-wrap: nowrap !important;
-    overflow-x: auto;
+    flex-wrap: wrap !important;
+    overflow-x: visible !important;
     width: 100%;
-    justify-content: flex-start !important;
-    padding: 0 0 var(--space-3) 0;
-    margin-left: 0;
-    margin-right: 0;
-    scroll-snap-type: x mandatory;
-    scroll-padding-left: 0;
-    scroll-padding-right: 0;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-    mask-image: none;
-    -webkit-mask-image: none;
+    justify-content: center !important;
+    gap: 8px 12px !important;
+    padding: 0 0 var(--space-4) 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
   
   .filter-bar::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+    display: none;
   }
 
   .filter-chip {
-    scroll-snap-align: start;
-    flex-shrink: 0;
+    scroll-snap-align: none !important;
+    flex-shrink: 1 !important;
   }
 }
 
@@ -886,30 +880,55 @@ input, select, textarea {
 @media (max-width: 768px) {
   .catalog-controls {
     flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-3);
+    align-items: center;
+    gap: var(--space-6);
   }
   
   .search-wrapper {
-    flex: none; /* Reset flex-basis so it does not stretch vertically in flex column */
-    max-width: none;
+    flex: none;
     width: 100%;
+    max-width: 400px;
   }
   
+  .search-wrapper svg {
+    display: none !important;
+  }
+
+  .search-input {
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--color-border, #e5dfd9) !important;
+    background: transparent !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    text-align: center !important;
+    font-style: italic !important;
+    font-size: 18px !important;
+    border-radius: 0 !important;
+  }
+
+  .search-input::placeholder {
+    font-style: italic !important;
+    text-align: center !important;
+    color: var(--color-outline) !important;
+  }
+
   .select-group {
-    width: 100%;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    gap: var(--space-4) !important;
   }
   
   .select-group .input-select {
-    flex: 1;
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .select-group {
-    flex-direction: column;
-    gap: var(--space-3);
+    width: 240px !important;
+    max-width: 100% !important;
+    text-align: center !important;
+    text-align-last: center !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    background-image: none !important;
   }
 }
 
