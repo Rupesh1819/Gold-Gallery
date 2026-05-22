@@ -76,7 +76,7 @@
   --container-max:    1440px;
   --gutter:           32px;
   --margin-desktop:   80px;
-  --margin-mobile:    24px;
+  --margin-mobile:    16px;
   --section-gap:      120px;
 
   /* ── Transitions ─────────────────────────────────────────────── */
@@ -109,11 +109,23 @@ html {
   scroll-padding-top: 90px; /* Account for sticky navbar */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 @media (min-width: 768px) {
   html {
     scroll-padding-top: 110px; /* Account for desktop sticky navbar */
+  }
+}
+
+#collection {
+  min-height: calc(100vh - 90px);
+}
+
+@media (min-width: 768px) {
+  #collection {
+    min-height: calc(100vh - 110px);
   }
 }
 
@@ -123,6 +135,8 @@ body {
   color: var(--color-on-surface);
   line-height: 1.6;
   min-height: 100vh;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 img, video {
@@ -415,6 +429,19 @@ input, select, textarea {
   font-weight: 400;
 }
 
+@media (max-width: 768px) {
+  .card-name {
+    font-size: 15px;
+  }
+  .card-price {
+    font-size: 17px;
+  }
+  .card-meta {
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+}
+
 /* ─── GOLD TICKER ───────────────────────────────────────────── */
 .gold-ticker {
   background: var(--color-inverse-surface);
@@ -457,19 +484,26 @@ input, select, textarea {
 .grid-catalog {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-8);
+  gap: var(--space-3) var(--space-3);
+}
+
+@media (min-width: 640px) {
+  .grid-catalog {
+    gap: var(--space-6);
+  }
 }
 
 @media (min-width: 768px) {
   .grid-catalog {
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-12);
+    gap: var(--space-10);
   }
 }
 
 @media (min-width: 1200px) {
   .grid-catalog {
     grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-12);
   }
 }
 
@@ -732,11 +766,18 @@ input, select, textarea {
 .navbar-logo {
   max-width: 140px;
   height: auto;
+  mix-blend-mode: multiply;
 }
 
 @media (min-width: 768px) {
   .navbar-logo {
     max-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar .price-badge {
+    display: none !important;
   }
 }
 
@@ -766,15 +807,18 @@ input, select, textarea {
   .filter-bar {
     flex-wrap: nowrap !important;
     overflow-x: auto;
+    width: 100%;
     justify-content: flex-start !important;
-    padding: 0 var(--space-2) var(--space-3) var(--space-2);
-    margin-left: calc(-1 * var(--margin-mobile));
-    margin-right: calc(-1 * var(--margin-mobile));
-    padding-left: var(--margin-mobile);
-    padding-right: var(--margin-mobile);
+    padding: 0 0 var(--space-3) 0;
+    margin-left: 0;
+    margin-right: 0;
     scroll-snap-type: x mandatory;
+    scroll-padding-left: 0;
+    scroll-padding-right: 0;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none; /* Firefox */
+    mask-image: none;
+    -webkit-mask-image: none;
   }
   
   .filter-bar::-webkit-scrollbar {
@@ -862,11 +906,25 @@ input, select, textarea {
   }
 }
 
-.filter-chip:hover,
+@media (max-width: 480px) {
+  .select-group {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+}
+
 .filter-chip.active {
   background: var(--color-gold);
   border-color: var(--color-gold);
   color: var(--color-on-surface);
+}
+
+@media (hover: hover) {
+  .filter-chip:hover {
+    background: var(--color-gold);
+    border-color: var(--color-gold);
+    color: var(--color-on-surface);
+  }
 }
 
 /* ─── WHATSAPP BUTTON ────────────────────────────────────────── */
@@ -960,8 +1018,14 @@ input, select, textarea {
 }
 
 /* ─── UTILITY ────────────────────────────────────────────────── */
-.section { padding: var(--section-gap) 0; }
-.section-sm { padding: var(--space-16) 0; }
+.section {
+  padding-top: var(--section-gap);
+  padding-bottom: var(--section-gap);
+}
+.section-sm {
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
+}
 .text-gold { color: var(--color-primary); }
 .text-muted { color: var(--color-outline); }
 .flex { display: flex; }
@@ -1195,8 +1259,26 @@ input, select, textarea {
 }
 
 @media (max-width: 768px) {
-  .hero { min-height: 70vh; }
-  .hero-stats { gap: var(--space-8); }
+  .hero {
+    min-height: auto;
+    padding: var(--space-20) var(--margin-mobile) var(--space-16);
+  }
+  .hero-eyebrow {
+    margin-bottom: var(--space-3);
+  }
+  .hero-title {
+    margin-bottom: var(--space-3);
+  }
+  .hero-subtitle {
+    font-size: var(--type-body-md);
+    margin-bottom: var(--space-6);
+  }
+  .hero-stats {
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    gap: var(--space-4) var(--space-6);
+    flex-wrap: wrap;
+  }
 }
 
 /* ─── MOBILE PUBLIC NAVBAR ──────────────────────────────────── */
@@ -1471,6 +1553,15 @@ input, select, textarea {
 .back-to-top:hover {
   background: var(--color-gold);
   color: #1a1508;
+}
+
+@media (max-width: 768px) {
+  .back-to-top {
+    bottom: var(--space-4);
+    right: var(--space-4);
+    width: 40px;
+    height: 40px;
+  }
 }
 
 /* ─── ABOUT PAGE ─────────────────────────────────────────────── */
