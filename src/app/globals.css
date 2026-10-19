@@ -442,7 +442,204 @@ input, select, textarea {
   }
 }
 
-/* ─── GOLD TICKER ───────────────────────────────────────────── */
+/* ─── RATE OF THE DAY (GOLD BAR & CARDS) ─────────────────────── */
+.gold-rate-bar {
+  background: var(--color-inverse-surface);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.22);
+  color: var(--color-inverse-on-surface);
+  padding: 8px 0;
+  position: relative;
+  z-index: 40;
+}
+
+.gold-rate-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.gold-rate-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gold-rate-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.gold-rate-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+  animation: ratePulse 2s infinite ease-in-out;
+}
+
+@keyframes ratePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.gold-rate-error {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 3px 8px;
+}
+
+.gold-rate-cards {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gold-rate-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  padding: 5px 14px;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.gold-rate-card:hover {
+  background: rgba(212, 175, 55, 0.08);
+  border-color: var(--color-gold);
+}
+
+.rate-card-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.rate-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rate-karat {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.03em;
+}
+
+.rate-purity {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-gold);
+  background: rgba(212, 175, 55, 0.16);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  padding: 1px 6px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.rate-card-price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.rate-amount {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-gold-light);
+  letter-spacing: 0.02em;
+}
+
+.rate-unit {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.02em;
+}
+
+.rate-loading-placeholder {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.04em;
+  animation: pulse 1.5s infinite;
+}
+
+.rate-pending {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--color-gold-dim);
+  letter-spacing: 0.04em;
+  font-style: italic;
+}
+
+.gold-rate-timestamp {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+@media (max-width: 768px) {
+  .gold-rate-bar {
+    padding: 8px 0;
+  }
+  .gold-rate-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .gold-rate-header {
+    justify-content: space-between;
+  }
+  .gold-rate-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+  }
+  .gold-rate-card {
+    padding: 6px 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .rate-card-meta {
+    justify-content: space-between;
+    width: 100%;
+  }
+  .rate-card-price {
+    width: 100%;
+  }
+  .gold-rate-timestamp {
+    justify-content: center;
+    font-size: 10px;
+  }
+}
+
+/* ── Legacy Gold Ticker Fallback ────────────────────────────── */
 .gold-ticker {
   background: var(--color-inverse-surface);
   color: var(--color-gold);
@@ -1755,3 +1952,72 @@ input, select, textarea {
   max-height: 90vh;
   object-fit: contain;
 }
+
+/* ─── ADMIN PRICING MANAGEMENT ───────────────────────────────── */
+.admin-pricing-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-outline-var);
+  padding: var(--space-8);
+}
+
+.pricing-fields-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+@media (max-width: 640px) {
+  .pricing-fields-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+}
+
+.pricing-helper-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: rgba(212, 175, 55, 0.15);
+  padding: 1px 6px;
+  margin-left: 6px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.admin-alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-6);
+  font-size: 13px;
+  font-family: var(--font-sans);
+}
+
+.admin-alert-banner.success {
+  background: var(--color-success-container);
+  color: var(--color-success);
+  border-left: 4px solid var(--color-success);
+}
+
+.admin-alert-banner.error {
+  background: var(--color-error-container);
+  color: var(--color-error);
+  border-left: 4px solid var(--color-error);
+}
+
+.admin-pricing-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: var(--space-4);
+  margin-top: var(--space-6);
+  border-top: var(--border-hairline);
+  font-size: 12px;
+  color: var(--color-outline);
+}
+

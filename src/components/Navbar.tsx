@@ -6,8 +6,14 @@ import { useGoldPrice } from "@/context/GoldPriceContext";
 import { TrendingUp, Menu, X } from "lucide-react";
 
 export default function Navbar() {
-  const { effectiveRatePerGram, loading } = useGoldPrice();
+  const { rate22k, rate24k, effectiveRatePerGram, loading } = useGoldPrice();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const priceBadgeText = loading
+    ? "—"
+    : rate22k > 0 && rate24k > 0
+    ? `22K: ₹${rate22k.toLocaleString("en-IN")}/g · 24K: ₹${rate24k.toLocaleString("en-IN")}/g`
+    : `₹${(rate22k || effectiveRatePerGram).toLocaleString("en-IN")}/g`;
 
   return (
     <>
@@ -40,9 +46,7 @@ export default function Navbar() {
               <div className="price-badge">
                 <div className="price-dot" />
                 <TrendingUp size={12} />
-                <span>
-                  {loading ? "—" : `₹${effectiveRatePerGram.toLocaleString("en-IN")}/g`}
-                </span>
+                <span>{priceBadgeText}</span>
               </div>
 
               {/* Mobile toggle */}
@@ -70,7 +74,7 @@ export default function Navbar() {
         <div className="price-badge" style={{ marginTop: "var(--space-4)" }}>
           <div className="price-dot" />
           <TrendingUp size={12} />
-          <span>{loading ? "—" : `₹${effectiveRatePerGram.toLocaleString("en-IN")}/g`}</span>
+          <span>{priceBadgeText}</span>
         </div>
       </div>
     </>

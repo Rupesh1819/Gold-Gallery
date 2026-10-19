@@ -10,18 +10,25 @@ import {
 import { Ornament, GoldRateSettings } from "@/lib/types";
 import { useGoldPrice } from "@/context/GoldPriceContext";
 import { useToast } from "@/context/ToastContext";
-import { Trash2, Pencil, X, Download, Search } from "lucide-react";
+import { Trash2, Pencil, X, Download, Search, CheckCircle2, AlertCircle, Clock } from "lucide-react";
 
 export default function AdminDashboard() {
   const [ornaments, setOrnaments] = useState<Ornament[]>([]);
-  const [settings, setSettings] = useState<GoldRateSettings>({ manual_rate: 6800, last_updated: new Date(), updated_by: "" });
+  const [settings, setSettings] = useState<GoldRateSettings>({ manual_rate: 15200, last_updated: new Date(), updated_by: "" });
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [inventorySearch, setInventorySearch] = useState("");
   const itemsPerPage = 10;
   const { showToast } = useToast();
-  const { calculatePrice } = useGoldPrice();
+  const { calculatePrice, refreshRates } = useGoldPrice();
+
+  // Pricing control states
+  const [rate22kInput, setRate22kInput] = useState("");
+  const [rate24kInput, setRate24kInput] = useState("");
+  const [isSavingRates, setIsSavingRates] = useState(false);
+  const [pricingError, setPricingError] = useState<string | null>(null);
+  const [pricingSuccess, setPricingSuccess] = useState<string | null>(null);
 
   // Form states
   const [name, setName] = useState("");
@@ -50,20 +57,112 @@ export default function AdminDashboard() {
 
   const fetchData = async () => {
     setLoading(true);
-    const [orns, sets] = await Promise.all([getOrnaments(), getGoldRateSettings()]);
-    setOrnaments(orns);
-    if (sets) setSettings(sets);
-    setLoading(false);
+    try {
+      const [orns, sets] = await Promise.all([getOrnaments(), getGoldRateSettings()]);
+      setOrnaments(orns);
+      if (sets) {
+        setSettings(sets);
+        const r22 = sets.manual_rate_22k || sets.manual_rate;
+        if (r22) setRate22kInput(r22.toString());
+        if (sets.manual_rate_24k) setRate24kInput(sets.manual_rate_24k.toString());
+      }
+    } catch (err) {
+      console.error("Failed to fetch dashboard data:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSettingsUpdate = async () => {
+  const handleSaveGoldRates = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setPricingError(null);
+    setPricingSuccess(null);
+
+    // 1. Validation to reject empty, invalid, zero, or negative rates
+    const trimmed22k = rate22kInput.trim();
+    const trimmed24k = rate24kInput.trim();
+
+    if (!trimmed22k) {
+      setPricingError("Please enter a valid 22K Gold Rate.");
+      return;
+    }
+    const val22 = parseFloat(trimmed22k);
+    if (isNaN(val22) || val22 <= 0) {
+      setPricingError("22K Gold Rate must be a valid positive number greater than 0.");
+      return;
+    }
+
+    if (!trimmed24k) {
+      setPricingError("Please enter a valid 24K Gold Rate.");
+      return;
+    }
+    const val24 = parseFloat(trimmed24k);
+    if (isNaN(val24) || val24 <= 0) {
+      setPricingError("24K Gold Rate must be a valid positive number greater than 0.");
+      return;
+    }
+
+    setIsSavingRates(true);
+
     try {
-      await updateGoldRateSettings(settings);
+      // Retrieve auth token from the active Supabase session
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+
+      let apiSuccess = false;
+      if (token) {
+        try {
+          const res = await fetch("/api/gold-rate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ rate22k: val22, rate24k: val24 }),
+          });
+
+          const resData = await res.json();
+          if (res.ok && resData.success) {
+            apiSuccess = true;
+          } else if (!res.ok && resData.error) {
+            throw new Error(resData.error);
+          }
+        } catch (fetchErr: unknown) {
+          console.warn("API route call failed, attempting direct database update:", fetchErr);
+        }
+      }
+
+      if (!apiSuccess) {
+        // Direct database update using authenticated Supabase client
+        await updateGoldRateSettings({
+          manual_rate: val22,
+          manual_rate_22k: val22,
+          manual_rate_24k: val24,
+          use_manual: true,
+          updated_by: sessionData.session?.user?.email || null,
+        });
+      }
+
       await fetchData();
-      showToast("Pricing settings updated!", "success");
+      await refreshRates();
+      setPricingSuccess(
+        `Gold rates saved successfully! 22K: ₹${val22.toLocaleString("en-IN")}/g | 24K: ₹${val24.toLocaleString("en-IN")}/g`
+      );
+      showToast("Gold rates saved successfully!", "success");
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Unknown error";
-      showToast("Error updating settings: " + message, "error");
+      console.error("Gold rate update error:", err);
+      let message = "Failed to update gold rates";
+      if (err instanceof Error) {
+        message = err.message;
+      } else if (typeof err === "object" && err !== null) {
+        message = (err as any).message || (err as any).error_description || JSON.stringify(err);
+      } else if (typeof err === "string") {
+        message = err;
+      }
+      setPricingError(message);
+      showToast("Error updating rates: " + message, "error");
+    } finally {
+      setIsSavingRates(false);
     }
   };
 
@@ -189,15 +288,110 @@ export default function AdminDashboard() {
         </div>
       </section>
 
-      {/* PRICING CONTROL */}
+      {/* ═══ GOLD RATE MANAGEMENT (PRICING CONTROL) ═══ */}
       <section id="pricing" className="mb-12">
-        <h2 className="text-headline-md mb-6">Pricing Control</h2>
-        <div className="stat-card" style={{ maxWidth: "600px" }}>
-          <div className="input-group mb-6">
-            <label className="input-label">Rate of the Day (INR/g)</label>
-            <input type="number" className="input-field" value={settings.manual_rate} onChange={(e) => setSettings({ ...settings, manual_rate: parseFloat(e.target.value) })} />
+        <div className="section-header" style={{ marginBottom: "var(--space-4)" }}>
+          <div>
+            <h2 className="text-headline-md">Gold Rate Management</h2>
+            <p className="text-body-md text-muted" style={{ marginTop: "4px" }}>
+              Configure daily 22K and 24K gold rates displayed on the public &ldquo;Rate of the Day&rdquo; section and used for jewelry price calculations.
+            </p>
           </div>
-          <button className="btn btn-primary" onClick={handleSettingsUpdate}>Update Rate Settings</button>
+        </div>
+
+        <div className="admin-pricing-card" style={{ maxWidth: "720px" }}>
+          {/* Success Banner */}
+          {pricingSuccess && (
+            <div className="admin-alert-banner success" role="status">
+              <CheckCircle2 size={18} />
+              <span>{pricingSuccess}</span>
+            </div>
+          )}
+
+          {/* Error Banner */}
+          {pricingError && (
+            <div className="admin-alert-banner error" role="alert">
+              <AlertCircle size={18} />
+              <span>{pricingError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSaveGoldRates}>
+            <div className="pricing-fields-grid">
+              {/* Field 1: 22K Gold Rate */}
+              <div className="input-group">
+                <label className="input-label" htmlFor="input-rate-22k" style={{ display: "flex", alignItems: "center" }}>
+                  <span>22K Gold Rate (₹/g)</span>
+                  <span className="pricing-helper-badge">Purity: 916</span>
+                </label>
+                <input
+                  id="input-rate-22k"
+                  type="number"
+                  step="1"
+                  min="1"
+                  required
+                  placeholder="e.g. 15200"
+                  className="input-field"
+                  disabled={isSavingRates}
+                  value={rate22kInput}
+                  onChange={(e) => {
+                    setRate22kInput(e.target.value);
+                    if (pricingError) setPricingError(null);
+                  }}
+                />
+              </div>
+
+              {/* Field 2: 24K Gold Rate */}
+              <div className="input-group">
+                <label className="input-label" htmlFor="input-rate-24k" style={{ display: "flex", alignItems: "center" }}>
+                  <span>24K Gold Rate (₹/g)</span>
+                  <span className="pricing-helper-badge">Purity: 999</span>
+                </label>
+                <input
+                  id="input-rate-24k"
+                  type="number"
+                  step="1"
+                  min="1"
+                  required
+                  placeholder="e.g. 16580"
+                  className="input-field"
+                  disabled={isSavingRates}
+                  value={rate24kInput}
+                  onChange={(e) => {
+                    setRate24kInput(e.target.value);
+                    if (pricingError) setPricingError(null);
+                  }}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-4)" }}>
+              <button
+                type="submit"
+                id="btn-save-gold-rates"
+                className="btn btn-primary"
+                disabled={isSavingRates}
+              >
+                {isSavingRates ? "Saving Gold Rates..." : "Save Gold Rates"}
+              </button>
+            </div>
+          </form>
+
+          {/* Pricing Meta & Timestamp */}
+          <div className="admin-pricing-meta">
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+              <Clock size={13} />
+              {settings.last_updated
+                ? `Last updated: ${new Date(settings.last_updated).toLocaleString("en-IN", {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })}`
+                : "No saved timestamp"}
+            </span>
+            {settings.updated_by && (
+              <span>Updated by: {settings.updated_by}</span>
+            )}
+          </div>
         </div>
       </section>
 
