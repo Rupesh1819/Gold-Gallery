@@ -8,15 +8,23 @@
  */
 
 const SESSION_COOKIE_NAME = 'astroveda_admin_session';
-const DEFAULT_SECRET = process.env.SUPABASE_SECRET_KEY || 'astroveda_sacred_admin_secret_key_2025';
 const AUTH_ISSUER = 'astroveda-auth-authority';
 const AUTH_AUDIENCE = 'astroveda-admin-sanctuary';
 
-// Master credentials configuration
-export const ADMIN_CREDENTIALS = {
-  email: process.env.ADMIN_EMAIL || 'admin@astroveda.com',
-  password: process.env.ADMIN_PASSWORD || 'AstroVeda@2025',
-};
+/**
+ * Returns cryptographic signing secret from environment.
+ * Rejects startup/signing if missing in production.
+ */
+export function getSigningSecret(): string {
+  const secret = process.env.SUPABASE_SECRET_KEY || process.env.ADMIN_JWT_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('FATAL SECURITY ERROR: SUPABASE_SECRET_KEY environment variable is not defined.');
+    }
+    return 'astroveda_local_dev_ephemeral_signing_secret_do_not_use_in_production';
+  }
+  return secret;
+}
 
 export { SESSION_COOKIE_NAME, AUTH_ISSUER, AUTH_AUDIENCE };
 
@@ -52,7 +60,7 @@ export async function createSessionToken(email: string, role = 'owner'): Promise
   const dataBase64 = Buffer.from(dataStr, 'utf8').toString('base64url');
 
   // Sign using Web Crypto API HMAC-SHA256
-  const signature = await generateSignature(dataBase64, DEFAULT_SECRET);
+  const signature = await generateSignature(dataBase64, getSigningSecret());
   return `${dataBase64}.${signature}`;
 }
 
@@ -160,7 +168,7 @@ export async function verifySessionToken(token: string): Promise<{ valid: boolea
   }
 
   // 1. Verify HMAC-SHA256 Signature
-  const expectedSignature = await generateSignature(dataBase64, DEFAULT_SECRET);
+  const expectedSignature = await generateSignature(dataBase64, getSigningSecret());
   if (signature.length !== expectedSignature.length) {
     return { valid: false };
   }
