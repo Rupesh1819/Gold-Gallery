@@ -33,9 +33,9 @@ function checkCustomAccounts(email: string, pass: string): { ok: boolean; name?:
 
 export async function POST(request: Request) {
   try {
-    // 1. Rate Limiting: 5 attempts per 15-minute sliding window per IP
+    // 1. Rate Limiting: 5 attempts per 15-minute sliding window per IP (Distributed & Fail-Secure)
     const clientIp = getClientIp(request);
-    const rateLimit = checkRateLimit(`admin_login:${clientIp}`, {
+    const rateLimit = await checkRateLimit(`admin_login:${clientIp}`, {
       limit: 5,
       windowMs: 15 * 60 * 1000,
     });

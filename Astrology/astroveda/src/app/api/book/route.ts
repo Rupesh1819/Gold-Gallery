@@ -8,7 +8,7 @@ import { checkRateLimit, getClientIp } from '@/lib/security/rateLimiter';
 export async function POST(request: Request) {
   try {
     const clientIp = getClientIp(request);
-    const rateCheck = checkRateLimit(`book:${clientIp}`, { limit: 10, windowMs: 15 * 60 * 1000 });
+    const rateCheck = await checkRateLimit(`book:${clientIp}`, { limit: 10, windowMs: 15 * 60 * 1000 });
     if (!rateCheck.allowed) {
       return NextResponse.json(
         {
@@ -161,9 +161,21 @@ export async function POST(request: Request) {
       .single();
 
     if (apptErr) {
-      console.error('Appointment insertion error:', apptErr);
+      // Catch PostgreSQL exclusion constraint violation (SQLSTATE 23P01)
+      if (
+        apptErr.code === '23P01' ||
+        apptErr.message?.includes('appointments_no_overlap') ||
+        apptErr.message?.includes('exclusion constraint')
+      ) {
+        return NextResponse.json(
+          { error: 'This appointment slot is no longer available. Please choose another time.' },
+          { status: 409 }
+        );
+      }
+
+      console.error('Appointment insertion error:', apptErr.code);
       return NextResponse.json(
-        { error: 'Could not register appointment: ' + apptErr.message },
+        { error: 'Unable to schedule appointment. Please try again or select another time.' },
         { status: 500 }
       );
     }
@@ -206,7 +218,7 @@ export async function POST(request: Request) {
       });
     }
 
-    console.log('[Notification Dispatcher] Seeker notification generated for:', cleanPhone);
+    console.log('[Notification Dispatcher] Seeker notification generated for Ref:', appointment.reference);
     console.log('[Notification Dispatcher] Astrologer alert generated for Ref:', appointment.reference);
 
     return NextResponse.json({
@@ -219,9 +231,9 @@ export async function POST(request: Request) {
       astrologerAlertUrl: astrologerAlert.whatsappAdminUrl,
     });
   } catch (err: any) {
-    console.error('Booking API handler exception:', err);
+    console.error('Booking API handler exception');
     return NextResponse.json(
-      { error: err.message || 'Server error processing booking' },
+      { error: 'An unexpected error occurred while processing your booking request. Please try again.' },
       { status: 500 }
     );
   }

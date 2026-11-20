@@ -1,0 +1,24 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Testing, Diagnostics & Security Audit Files
+coverage
+scratch/
+AUDIT.md
+*.log
+
+# Next.js Build Output
+.next/
+out/
+build/
+
+# Environment, Local Secrets & Git
+.env*
+.git
+.gitignore
+
+# System Files
+.DS_Store
+*.pem
