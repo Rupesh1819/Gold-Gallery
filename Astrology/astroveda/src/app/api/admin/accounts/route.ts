@@ -103,7 +103,7 @@ export async function PATCH(request: Request) {
 
   try {
     const body = await request.json();
-    const { id, currentPassword, newPassword, toggleActive } = body;
+    const { id, currentPassword, newPassword, newEmail, toggleActive } = body;
 
     const accounts = getAccounts();
     const accountIndex = accounts.findIndex((a) => a.id === id);
@@ -114,14 +114,30 @@ export async function PATCH(request: Request) {
 
     const account = accounts[accountIndex];
 
-    // Password change request
-    if (newPassword) {
+    // Require current password if updating credentials (email or password)
+    if (newPassword || newEmail) {
       if (!currentPassword) {
-        return NextResponse.json({ error: 'Current password is required' }, { status: 400 });
+        return NextResponse.json({ error: 'Current password is required to change credentials' }, { status: 400 });
       }
       if (!verifyPassword(currentPassword, account.password || '')) {
         return NextResponse.json({ error: 'Current password does not match' }, { status: 400 });
       }
+    }
+
+    // Email update request
+    if (newEmail && newEmail.trim().toLowerCase() !== account.email.toLowerCase()) {
+      const cleanEmail = newEmail.trim().toLowerCase();
+      if (!cleanEmail.includes('@') || !cleanEmail.includes('.')) {
+        return NextResponse.json({ error: 'Please enter a valid email address' }, { status: 400 });
+      }
+      if (accounts.some((a, idx) => idx !== accountIndex && a.email.toLowerCase() === cleanEmail)) {
+        return NextResponse.json({ error: 'An admin account with this email already exists' }, { status: 400 });
+      }
+      account.email = cleanEmail;
+    }
+
+    // Password change request
+    if (newPassword) {
       if (newPassword.length < 8) {
         return NextResponse.json({ error: 'New password must be at least 8 characters' }, { status: 400 });
       }

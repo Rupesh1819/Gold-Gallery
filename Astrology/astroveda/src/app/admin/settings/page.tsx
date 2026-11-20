@@ -37,7 +37,8 @@ export default function SettingsAdminPage() {
   const [email, setEmail] = useState(siteConfig.contact.email);
   const [saved, setSaved] = useState(false);
 
-  // Password Change State
+  // Password & Credential Change State
+  const [superadminEmail, setSuperadminEmail] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -67,6 +68,9 @@ export default function SettingsAdminPage() {
       const data = await res.json();
       if (data.accounts) {
         setAccounts(data.accounts);
+        if (data.accounts[0]?.email) {
+          setSuperadminEmail(data.accounts[0].email);
+        }
       }
     } catch (err) {
       console.error('Failed to load admin accounts:', err);
@@ -85,18 +89,25 @@ export default function SettingsAdminPage() {
     setTimeout(() => setSaved(false), 3000);
   };
 
-  // Change Password
+  // Change Credentials (Email and/or Password)
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordStatus(null);
 
-    if (newPassword !== confirmPassword) {
-      setPasswordStatus({ type: 'error', message: 'New password and confirmation do not match.' });
+    if (!currentPassword) {
+      setPasswordStatus({ type: 'error', message: 'Current password is required to verify your identity.' });
       return;
     }
-    if (newPassword.length < 8) {
-      setPasswordStatus({ type: 'error', message: 'New password must be at least 8 characters long.' });
-      return;
+
+    if (newPassword) {
+      if (newPassword !== confirmPassword) {
+        setPasswordStatus({ type: 'error', message: 'New password and confirmation do not match.' });
+        return;
+      }
+      if (newPassword.length < 8) {
+        setPasswordStatus({ type: 'error', message: 'New password must be at least 8 characters long.' });
+        return;
+      }
     }
 
     try {
@@ -108,18 +119,20 @@ export default function SettingsAdminPage() {
         body: JSON.stringify({
           id: primaryId,
           currentPassword,
-          newPassword,
+          newEmail: superadminEmail,
+          newPassword: newPassword || undefined,
         }),
       });
       const data = await res.json();
 
       if (data.success) {
-        setPasswordStatus({ type: 'success', message: 'Master admin credentials updated securely!' });
+        setPasswordStatus({ type: 'success', message: 'Master Superadmin ID & Credentials updated successfully!' });
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
+        loadAccounts();
       } else {
-        setPasswordStatus({ type: 'error', message: data.error || 'Failed to update password.' });
+        setPasswordStatus({ type: 'error', message: data.error || 'Failed to update credentials.' });
       }
     } catch (err: any) {
       setPasswordStatus({ type: 'error', message: err.message || 'Connection error' });
@@ -260,10 +273,10 @@ export default function SettingsAdminPage() {
           </div>
           <div>
             <h2 className="font-heading text-lg font-bold text-[#DBE1FD]">
-              Admin Credentials &amp; Password
+              Superadmin ID &amp; Password
             </h2>
             <p className="text-xs text-[#D0C5B4]/70">
-              Update password for the primary administrator account (<span className="text-[#F6D186]">admin@astroveda.com</span>).
+              Update login email (ID) and master password for the Superadmin account (<span className="text-[#F6D186] font-mono">{superadminEmail || 'admin@astroveda.com'}</span>).
             </p>
           </div>
         </div>
@@ -286,29 +299,41 @@ export default function SettingsAdminPage() {
         )}
 
         <form onSubmit={handleChangePassword} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="block text-xs font-semibold text-[#D0C5B4] mb-1.5">
-                Current Password
+                Superadmin Login Email / ID
+              </label>
+              <input
+                type="email"
+                required
+                value={superadminEmail}
+                placeholder="admin@astroveda.com"
+                onChange={(e) => setSuperadminEmail(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#141B2F] border border-[#27304A] text-xs text-[#DBE1FD] focus:outline-none focus:border-[#D8B56D]"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-[#D0C5B4] mb-1.5">
+                Current Password <span className="text-red-400">*</span>
               </label>
               <input
                 type="password"
                 required
                 value={currentPassword}
-                placeholder="••••••••"
+                placeholder="Current password"
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-[#141B2F] border border-[#27304A] text-xs text-[#DBE1FD] focus:outline-none focus:border-[#D8B56D]"
               />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#D0C5B4] mb-1.5">
-                New Secure Password
+                New Password (Optional)
               </label>
               <input
                 type="password"
-                required
                 value={newPassword}
-                placeholder="Min 8 characters"
+                placeholder="Leave blank to keep same"
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-[#141B2F] border border-[#27304A] text-xs text-[#DBE1FD] focus:outline-none focus:border-[#D8B56D]"
               />
@@ -319,9 +344,8 @@ export default function SettingsAdminPage() {
               </label>
               <input
                 type="password"
-                required
                 value={confirmPassword}
-                placeholder="Re-type new password"
+                placeholder="Confirm new password"
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-[#141B2F] border border-[#27304A] text-xs text-[#DBE1FD] focus:outline-none focus:border-[#D8B56D]"
               />
@@ -334,7 +358,7 @@ export default function SettingsAdminPage() {
               disabled={passwordLoading}
               className="px-5 py-2 rounded-xl bg-[#D8B56D] hover:bg-[#F6D186] text-[#10172B] font-bold text-xs transition-colors cursor-pointer"
             >
-              {passwordLoading ? 'Updating...' : 'Update Admin Password'}
+              {passwordLoading ? 'Updating...' : 'Update Superadmin Credentials'}
             </button>
           </div>
         </form>
