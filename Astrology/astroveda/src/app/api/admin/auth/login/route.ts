@@ -65,7 +65,7 @@ export async function POST(request: Request) {
 
     const cleanEmail = email.trim().toLowerCase();
     let authenticated = false;
-    let adminName = 'Acharya Admin';
+    let adminName = 'Omkar Ransing Guruji';
 
     // 2. Authenticate against cryptographic scrypt hashes in admin accounts registry
     const customAuth = checkCustomAccounts(cleanEmail, password);

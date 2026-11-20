@@ -1,0 +1,36 @@
+[
+  {
+    "id": "update-1",
+    "type": "bulletin",
+    "title": "Surya Grahan (Solar Eclipse) & Sadhana Guidelines",
+    "category": "Panchang Alert",
+    "date": "Today, 06:30 AM IST",
+    "content": "Auspicious blessings to all seekers. During the upcoming celestial transit, avoid signing major contracts or starting foundation ceremonies during the Sutak period. Dedicated meditation and chanting of the Gayatri Mantra will yield 100-fold spiritual merit.",
+    "pinned": true,
+    "active": true,
+    "author": "Omkar Ransing Guruji"
+  },
+  {
+    "id": "update-2",
+    "type": "bulletin",
+    "title": "Guru (Jupiter) Expansive Alignment in Taurus",
+    "category": "Graha Gochar Transit",
+    "date": "Yesterday, 04:15 PM IST",
+    "content": "Brihaspati's transit across Taurus creates favorable Dhan Yoga for Vrishabha, Kanya, and Makara moon signs. A golden period for higher learning, debt clearance, and righteous investments.",
+    "pinned": false,
+    "active": true,
+    "author": "Omkar Ransing Guruji"
+  },
+  {
+    "id": "update-3",
+    "type": "bulletin",
+    "title": "Pradosh Vrat & Evening Shiva Archana Muhurta",
+    "category": "Festival Muhurta",
+    "date": "10 Jan 2025",
+    "content": "Shukla Paksha Pradosha falls this Friday. Auspicious Sandhya Puja window is 06:14 PM to 08:42 PM IST. Offering raw milk and Bilva leaves brings profound emotional peace and pacifies malefic Moon.",
+    "pinned": false,
+    "active": true,
+    "author": "Omkar Ransing Guruji"
+  }
+]
+

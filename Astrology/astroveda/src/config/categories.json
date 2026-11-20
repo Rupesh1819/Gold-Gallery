@@ -1,0 +1,74 @@
+[
+  {
+    "id": "panchang-alert",
+    "name": "Panchang Alert",
+    "translations": {
+      "en": "Panchang Alert",
+      "hi": "पंचांग सूचना",
+      "mr": "पंचांग सूचना"
+    }
+  },
+  {
+    "id": "graha-transit",
+    "name": "Planetary Transits",
+    "translations": {
+      "en": "Planetary Transits",
+      "hi": "ग्रह गोचर",
+      "mr": "ग्रह गोचर"
+    }
+  },
+  {
+    "id": "festival-muhurta",
+    "name": "Festival Muhurta",
+    "translations": {
+      "en": "Festival Muhurta",
+      "hi": "त्योहार व शुभ मुहूर्त",
+      "mr": "सण व शुभ मुहूर्त"
+    }
+  },
+  {
+    "id": "spiritual-guidance",
+    "name": "Spiritual Guidance",
+    "translations": {
+      "en": "Spiritual Guidance",
+      "hi": "अध्यात्मिक मार्गदर्शन",
+      "mr": "आध्यात्मिक मार्गदर्शन"
+    }
+  },
+  {
+    "id": "vedic-remedies",
+    "name": "Vedic Remedies",
+    "translations": {
+      "en": "Vedic Remedies",
+      "hi": "वैदिक उपाय",
+      "mr": "वैदिक तोडगे व उपाय"
+    }
+  },
+  {
+    "id": "vastu-space",
+    "name": "Vastu & Space",
+    "translations": {
+      "en": "Vastu & Space",
+      "hi": "वास्तु शास्त्र",
+      "mr": "वास्तू शास्त्र"
+    }
+  },
+  {
+    "id": "chart-interpretation",
+    "name": "Chart Interpretation",
+    "translations": {
+      "en": "Chart Interpretation",
+      "hi": "कुंडली विश्लेषण",
+      "mr": "पत्रिका विश्लेषण"
+    }
+  },
+  {
+    "id": "navratri-special",
+    "name": "Navratri Special",
+    "translations": {
+      "en": "Navratri Special",
+      "hi": "नवरात्रि विशेष",
+      "mr": "नवरात्री विशेष"
+    }
+  }
+]

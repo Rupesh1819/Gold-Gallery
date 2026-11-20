@@ -60,7 +60,7 @@ function LoginForm() {
             </svg>
           </div>
           <span className="font-heading text-2xl font-bold text-[#10172B]">
-            AstroVeda
+            MyGuruji
           </span>
         </div>
 

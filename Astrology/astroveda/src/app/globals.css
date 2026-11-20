@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+:root {
+  --color-midnight: #10172B;
+  --color-midnight-canvas: #10172B;
+  --color-cosmic: #27304A;
+  --color-cosmic-surface: #27304A;
+  --color-surface-dim: #0B1326;
+  --color-surface: #0B1326;
+  --color-surface-container: #181F33;
+  --color-surface-container-low: #141B2F;
+  --color-surface-container-high: #22293E;
+  --color-surface-container-highest: #2D344A;
+
+  --color-gold: #D8B56D;
+  --color-gold-accent: #D8B56D;
+  --color-gold-ink: #7A5A12;
+  --color-primary: #F6D186;
+  --color-primary-container: #D8B56D;
+
+  --color-ivory: #F7F3EA;
+  --color-ivory-canvas: #F7F3EA;
+
+  --color-action: #D62839;
+  --color-action-red: #D62839;
+  --color-action-hover: #B81F2F;
+  --color-sacred-red: #EF3340;
+
+  --color-on-surface: #DBE1FD;
+  --color-on-surface-variant: #D0C5B4;
+
+  --color-background: var(--color-ivory);
+  --color-foreground: var(--color-midnight);
+}
+
+@theme {
+  --color-midnight: #10172B;
+  --color-midnight-canvas: #10172B;
+  --color-cosmic: #27304A;
+  --color-cosmic-surface: #27304A;
+  --color-surface: #0B1326;
+  --color-surface-dim: #0B1326;
+  --color-surface-container: #181F33;
+  --color-surface-container-low: #141B2F;
+  --color-surface-container-high: #22293E;
+  --color-surface-container-highest: #2D344A;
+
+  --color-gold: #D8B56D;
+  --color-gold-accent: #D8B56D;
+  --color-gold-ink: #7A5A12;
+  --color-primary: #F6D186;
+  --color-primary-container: #D8B56D;
+
+  --color-ivory: #F7F3EA;
+  --color-ivory-canvas: #F7F3EA;
+
+  --color-action: #D62839;
+  --color-action-red: #D62839;
+  --color-action-hover: #B81F2F;
+  --color-sacred-red: #EF3340;
+
+  --color-on-surface: #DBE1FD;
+  --color-on-surface-variant: #D0C5B4;
+
+  --font-heading: var(--font-eb-garamond), var(--font-noto-serif-deva), Georgia, serif;
+  --font-body: var(--font-manrope), var(--font-noto-sans-deva), system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-midnight-canvas);
+  color: var(--color-on-surface);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Devanagari line-height elevation to prevent matra clipping */
+:lang(hi),
+:lang(mr) {
+  line-height: 1.8 !important;
+}
+
+:lang(hi) h1,
+:lang(hi) h2,
+:lang(hi) h3,
+:lang(mr) h1,
+:lang(mr) h2,
+:lang(mr) h3 {
+  line-height: 1.4 !important;
+}
+
+/* Skip link */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  z-index: 100;
+}
+
+.skip-to-content:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--color-action);
+  color: #FFFFFF;
+  font-weight: 700;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
