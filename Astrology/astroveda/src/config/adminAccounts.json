@@ -2,11 +2,10 @@
   {
     "id": "admin-primary-1",
     "name": "Omkar Ransing Guruji (Chief Daivajna)",
-    "email": "admin@astroveda.com",
-    "password": "scrypt:529d90895bc79e2a9765cbba1b73b261:2f6d68aaad5e11d7289101a811e213fe2695bb758f8d4026653b5748e40326bc53deb0e165152d2f0560fc5e5308dd421ac5cb2119d1992c0901dfab39c54c5b",
+    "email": "admin@myguruji.com",
+    "password": "scrypt:05ef5714416b7dd05ed361471245b8d8:43f485a472db61821312931ecb6186527bfa8f1b1543cafddb488cb157b5dc5689edba44a46cd5031fbc2adda6a8398944e029bdf808641b27c9044eef7b2238",
     "role": "Super Admin",
     "active": true,
     "createdAt": "2025-01-01T00:00:00.000Z"
   }
 ]
-
