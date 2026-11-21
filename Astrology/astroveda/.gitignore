@@ -1,6 +1,90 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ==============================================================================
+# ASTROVEDA / MYGURUJI - COMPREHENSIVE PRODUCTION .GITIGNORE
+# ==============================================================================
 
-# dependencies
+# ------------------------------------------------------------------------------
+# 1. ENVIRONMENT VARIABLES & SECRETS (CRITICAL - NEVER COMMIT)
+# ------------------------------------------------------------------------------
+.env
+.env*.local
+.env.development
+.env.test
+.env.production
+.env.staging
+*.env
+!.env.example
+
+# Private Credentials & Certificates
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
+*.pkcs12
+id_rsa*
+*.id_rsa
+service-account*.json
+google-services*.json
+firebase-adminsdk*.json
+*credentials*.json
+
+# Admin accounts with sensitive hashes/passwords
+src/config/adminAccounts.json
+!src/config/adminAccounts.example.json
+
+# ------------------------------------------------------------------------------
+# 2. SENSITIVE DOCUMENTS, AUDITS & BUSINESS DATA (PREVENT LEAKS)
+# ------------------------------------------------------------------------------
+# Security audit reports & pentest documents
+AUDIT.md
+*audit*
+*pentest*
+security-audit*
+Pre-Launch*
+
+# Office documents, spreadsheets, client lists & PDFs
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.csv
+*.tsv
+*.ppt
+*.pptx
+
+# Database dumps, raw records & backups
+*.dump
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+*.backup
+# Ignore loose SQL dumps but preserve migration scripts
+*.sql
+!supabase/migrations/*.sql
+
+# ------------------------------------------------------------------------------
+# 3. SCRATCH, TEMPORARY & CACHE DIRECTORIES
+# ------------------------------------------------------------------------------
+scratch/
+temp/
+tmp/
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# User uploads & runtime generated media
+uploads/
+user_uploads/
+.user_uploaded/
+
+# ------------------------------------------------------------------------------
+# 4. DEPENDENCIES & PACKAGE MANAGERS
+# ------------------------------------------------------------------------------
 /node_modules
 /.pnp
 .pnp.*
@@ -10,37 +94,46 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
-# next.js
+# ------------------------------------------------------------------------------
+# 5. NEXT.JS & BUILD ARTIFACTS
+# ------------------------------------------------------------------------------
 /.next/
 /out/
+/build/
+/dist/
+/.turbo/
+.vercel/
 
-# production
-/build
+# TypeScript & Test Coverage
+*.tsbuildinfo
+next-env.d.ts
+/coverage/
 
-# misc
-.DS_Store
-*.pem
-
-# debug
+# ------------------------------------------------------------------------------
+# 6. LOGS & DEBUG FILES
+# ------------------------------------------------------------------------------
+*.log
+*.log*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# ------------------------------------------------------------------------------
+# 7. OS & IDE CONFIGURATIONS
+# ------------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
 
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# security audit findings & scratch scripts
-AUDIT.md
-scratch/
-
+# IDE / Editor folders
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

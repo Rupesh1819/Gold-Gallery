@@ -1,0 +1,65 @@
+# ==============================================================================
+# REPOSITORY ROOT .GITIGNORE (PROJECTS LEVEL)
+# Protects all subprojects from exposing sensitive documents, secrets and build outputs
+# ==============================================================================
+
+# Environment files & Secrets
+.env
+.env*
+*.env
+!.env.example
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
+*.pkcs12
+service-account*.json
+firebase-adminsdk*.json
+*credentials*.json
+
+# Admin accounts with sensitive live hashes
+**/src/config/adminAccounts.json
+!**/src/config/adminAccounts.example.json
+
+# Sensitive documents, audit reports & PDFs
+AUDIT.md
+*audit*
+*pentest*
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.csv
+*.tsv
+
+# Scratch & temporary folders
+scratch/
+**/scratch/
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+
+# Dependencies & Build
+node_modules/
+.next/
+out/
+build/
+dist/
+.turbo/
+.vercel/
+
+# Logs
+*.log
+*.log*
+
+# System & OS
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

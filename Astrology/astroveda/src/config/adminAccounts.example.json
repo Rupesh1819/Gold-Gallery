@@ -1,0 +1,11 @@
+[
+  {
+    "id": "admin-primary-1",
+    "name": "Super Admin",
+    "email": "admin@myguruji.com",
+    "password": "",
+    "role": "Super Admin",
+    "active": true,
+    "createdAt": "2025-01-01T00:00:00.000Z"
+  }
+]
