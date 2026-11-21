@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 100" fill="none">
+  <!-- Celestial Emblem -->
+  <g transform="translate(50,50)">
+    <!-- Outer zodiac circle -->
+    <circle cx="0" cy="0" r="28" stroke="#D8B56D" stroke-width="1.2" fill="none"/>
+    <!-- Inner circle -->
+    <circle cx="0" cy="0" r="20" stroke="#D8B56D" stroke-width="0.8" fill="none"/>
+    <!-- Sun/star motif center -->
+    <circle cx="0" cy="0" r="5" fill="#D8B56D"/>
+    <!-- Star rays -->
+    <line x1="0" y1="-8" x2="0" y2="-18" stroke="#D8B56D" stroke-width="1.2"/>
+    <line x1="0" y1="8" x2="0" y2="18" stroke="#D8B56D" stroke-width="1.2"/>
+    <line x1="-8" y1="0" x2="-18" y2="0" stroke="#D8B56D" stroke-width="1.2"/>
+    <line x1="8" y1="0" x2="18" y2="0" stroke="#D8B56D" stroke-width="1.2"/>
+    <!-- Diagonal rays -->
+    <line x1="-5.66" y1="-5.66" x2="-14.14" y2="-14.14" stroke="#D8B56D" stroke-width="0.8"/>
+    <line x1="5.66" y1="-5.66" x2="14.14" y2="-14.14" stroke="#D8B56D" stroke-width="0.8"/>
+    <line x1="-5.66" y1="5.66" x2="-14.14" y2="14.14" stroke="#D8B56D" stroke-width="0.8"/>
+    <line x1="5.66" y1="5.66" x2="14.14" y2="14.14" stroke="#D8B56D" stroke-width="0.8"/>
+    <!-- Small dots on outer circle (zodiac markers) -->
+    <circle cx="0" cy="-28" r="1.5" fill="#D8B56D"/>
+    <circle cx="14" cy="-24.25" r="1.2" fill="#D8B56D"/>
+    <circle cx="24.25" cy="-14" r="1.2" fill="#D8B56D"/>
+    <circle cx="28" cy="0" r="1.5" fill="#D8B56D"/>
+    <circle cx="24.25" cy="14" r="1.2" fill="#D8B56D"/>
+    <circle cx="14" cy="24.25" r="1.2" fill="#D8B56D"/>
+    <circle cx="0" cy="28" r="1.5" fill="#D8B56D"/>
+    <circle cx="-14" cy="24.25" r="1.2" fill="#D8B56D"/>
+    <circle cx="-24.25" cy="14" r="1.2" fill="#D8B56D"/>
+    <circle cx="-28" cy="0" r="1.5" fill="#D8B56D"/>
+    <circle cx="-24.25" cy="-14" r="1.2" fill="#D8B56D"/>
+    <circle cx="-14" cy="-24.25" r="1.2" fill="#D8B56D"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="92" y="45" font-family="'Cormorant Garamond',Georgia,serif" font-size="32" font-weight="600" fill="#10172B" letter-spacing="3">AstroVeda</text>
+  <!-- Tagline -->
+  <text x="92" y="65" font-family="'Inter',sans-serif" font-size="8.5" fill="#7A5A12" letter-spacing="1.5">Ancient Wisdom. A Clearer Path Forward.</text>
+</svg>
